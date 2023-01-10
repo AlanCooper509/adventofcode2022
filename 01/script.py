@@ -1,11 +1,15 @@
 import sys
 
 def main(fname, maxCount=1):
-    if (not isinstance(fname, str)):
+    # guard clauses for inputs to calling script
+    if (not isinstance(fname, str) or fname.endswith(".txt")):
+        print("'.txt' filename string expected")
         return
     if (not maxCount.isdigit()):
+        print("second argument should be the number of maximums to print out")
         return
-    # read from file
+
+    # read content from input file (this is assumed to be properly formatted)
     input = None
     with open(fname, "r+") as file:
         input = file.read()
@@ -22,7 +26,7 @@ def main(fname, maxCount=1):
         elfValue = sum([int(item) for item in elfItems])
         elfValues.append(elfValue)
 
-    # remove maximum item sum from list
+    # grab 'maxCount' number of maximum item sums from the 'elfValues' list
     topValues = []
     for i in range(int(maxCount)):
         highestSum = elfValues.pop(elfValues.index(max(elfValues)))
