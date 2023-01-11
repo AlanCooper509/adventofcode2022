@@ -1,6 +1,6 @@
 import sys
 
-def get_points(round):
+def get_result(round):
     """
     Convert the ABC / XYZ from char values into {0, 1, 2} for {R, P, S} respectively.
     Then, subtract opponent hand from yours and take the mod3 to determine the winner:
@@ -32,6 +32,31 @@ def get_points(round):
     
     return (result + bonus)
 
+def get_hand(round):
+    """
+    Convert the ABC from char values into {0, 1, 2} for {R, P, S} respectively by opponent.
+    Convert the XYZ from char values into {-1, 0, 1} for {Lose, Draw, Win} respectively for you.
+
+    Note that with these defined mappings:
+        the second set {-1, 0, 1} represents offsets to apply to the round-robin [R, P, S] list [0, 1, 2]
+        and this will determine what your "hand" should be.
+
+    For Example:
+        Opponent picks Scissors (2), and you wish to Win (1), so (2 + 1) mod 3 = 0 means you should play Rock (0).
+    
+    This method determines the "hand" that should be played in this manner, then settles the points appropriately.
+    """
+    
+    oppInput = round.split(' ')[0]
+    youInput = round.split(' ')[1]
+    oppValue = ord(oppInput) - ord('A')   # ascii to {0, 1, 2} for {R, P, S}
+    offset = ord(youInput) - ord('X') - 1 # ascii to {-1, 0, 1} for {L, D, W}
+    
+    handBonus = ((oppValue + offset) % 3) + 1
+    resultBonus = 3*(offset + 1)
+
+    return resultBonus + handBonus
+
 def read_input(fname):
     def fname_has_error(fname):
         if (not isinstance(fname, str) or not fname.endswith(".txt")):
@@ -49,13 +74,17 @@ def read_input(fname):
         input = file.read()
     return input
 
-def main(fname):
+def main(fname, part=1):
     input = read_input(fname)
-    rounds = input.split('\n')
 
+    rounds = input.split('\n')
     total = 0
-    for round in rounds:
-        total += get_points(round)
+    if part == 1:
+        for round in rounds:
+            total += get_result(round)
+    if part == 2:
+        for round in rounds:
+            total += get_hand(round)
 
     print(total)
 
@@ -65,5 +94,10 @@ if __name__ == "__main__":
         print("Error: input filename not passed in as an argument")
     elif len(args) == 1:
         main(args[0])
-    elif len(args) > 1:
+    elif len(args) == 2:
+        if args[1] not in ['1', '2']:
+            print("Error: second arg should be '1' or '2'")
+        else:
+            main(args[0], int(args[1]))
+    elif len(args) > 2:
         print("Error: too many input arguments passed in")
