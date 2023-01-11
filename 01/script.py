@@ -5,7 +5,7 @@ def main(fname, maxCount=1):
     if (not isinstance(fname, str) or not fname.endswith(".txt")):
         print("'.txt' filename string expected")
         return
-    if (not maxCount.isdigit()):
+    if (isinstance(maxCount, str) and not maxCount.isdigit()):
         print("second argument should be the number of maximums to print out")
         return
 
