@@ -2,7 +2,7 @@ import sys
 
 def main(fname, maxCount=1):
     # guard clauses for inputs to calling script
-    if (not isinstance(fname, str) or fname.endswith(".txt")):
+    if (not isinstance(fname, str) or not fname.endswith(".txt")):
         print("'.txt' filename string expected")
         return
     if (not maxCount.isdigit()):
