@@ -20,7 +20,7 @@ def read_input(fname):
 def find_duplicate(compart1, compart2):
     # guard clause just for good practice
     if len(compart1) != len(compart2):
-        print("Error: compartments are different lenghts")
+        print("Error: compartments are different lengths")
         return
 
     # hash map for runtime efficiency
