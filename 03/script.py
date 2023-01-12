@@ -31,6 +31,18 @@ def find_duplicate(compart1, compart2):
         if item in hashbrowns:
             return item
 
+def find_common_letter(elf1, elf2, elf3):
+    # hash map for runtime efficiency
+    hashbrowns = {}
+    for item in elf1:
+        hashbrowns[item] = False
+    for item in elf2:
+        if item in hashbrowns:
+            hashbrowns[item] = True
+    for item in elf3:
+        if item in hashbrowns and hashbrowns[item] == True:
+            return item
+
 def get_letter_value(dupe):
     # map a-z;A-Z to 1-26;33-58 by utilizing their ascii value mappings
     priority = ord(dupe.swapcase()) - ord('A') + 1
@@ -46,23 +58,29 @@ def main(fname, part=1):
 
     rucksacks = input.split('\n')
     sum = 0
-    for rucksack in rucksacks:
-        itemCount = int(len(rucksack))
-        divider = int(itemCount/2)
+    if part == 1:
+        for rucksack in rucksacks:
+            itemCount = int(len(rucksack))
+            divider = int(itemCount/2)
 
-        # guard clause on each rucksack entry
-        if itemCount % 2 == 1 or itemCount < 2:
-            print(f'Error: invalid rucksack {rucksack}')
-            return
+            # guard clause on each rucksack entry
+            if itemCount % 2 == 1 or itemCount < 2:
+                print(f'Error: invalid rucksack {rucksack}')
+                return
 
-        # split rucksack into the two compartments
-        compart1 = rucksack[: divider]
-        compart2 = rucksack[divider :]
-        
-        dupe = find_duplicate(compart1, compart2)
-        value = get_letter_value(dupe)
-        print(f"{dupe}: {value}")
-        sum += value
+            # split rucksack into the two compartments
+            compart1 = rucksack[: divider]
+            compart2 = rucksack[divider :]
+            
+            dupe = find_duplicate(compart1, compart2)
+            sum += get_letter_value(dupe)
+    if part == 2:
+        for idx in range(0, len(rucksacks), 3):
+            elf1 = rucksacks[idx]
+            elf2 = rucksacks[idx+1]
+            elf3 = rucksacks[idx+2]
+            letter = find_common_letter(elf1, elf2, elf3)
+            sum += get_letter_value(letter)
 
     print(sum)
 
@@ -72,5 +90,10 @@ if __name__ == "__main__":
         print("Error: input filename not passed in as an argument")
     elif len(args) == 1:
         main(args[0])
-    elif len(args) > 1:
+    elif len(args) == 2:
+        if args[1] not in ['1', '2']:
+            print("Error: second arg should be '1' or '2'")
+        else:
+            main(args[0], int(args[1]))
+    elif len(args) > 2:
         print("Error: too many input arguments passed in")
