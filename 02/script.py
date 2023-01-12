@@ -11,7 +11,7 @@ def get_result(round):
     
     Since the rewards are 0 for losing, 3 for draw, 6 for winning, do some math to automate this from the above output:
         - This can be done with the formula:
-            result = ((|output - 2| - 1) % 3) * 3
+            resultBonus = ((|output - 2| - 1) % 3) * 3
 
         Given inputs from the set {0(draw), 1(lose), 2(win)} it maps to outputs {0(lose), 3(draw), 6(win)}
     """
@@ -25,12 +25,12 @@ def get_result(round):
     output = (oppValue - youValue) % 3
     
     # map outputs to score values 6/3/0 for win/draw/lose using some ~fancy math~
-    result = 3*((abs(output - 2) - 1) % 3)
+    resultBonus = 3*((abs(output - 2) - 1) % 3)
     
     # bonus points: 1 for R, 2 for S, 3 for P
-    bonus = youValue + 1
+    handBonus = youValue + 1
     
-    return (result + bonus)
+    return (resultBonus + handBonus)
 
 def get_hand(round):
     """
