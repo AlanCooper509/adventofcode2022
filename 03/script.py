@@ -75,6 +75,9 @@ def main(fname, part=1):
             dupe = find_duplicate(compart1, compart2)
             sum += get_letter_value(dupe)
     if part == 2:
+        if len(rucksacks) % 3 != 0:
+            print("Error: elves not a multiple of three")
+            return
         for idx in range(0, len(rucksacks), 3):
             elf1 = rucksacks[idx]
             elf2 = rucksacks[idx+1]
