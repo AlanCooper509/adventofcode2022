@@ -21,20 +21,21 @@ def main(fname, part=1):
     input = read_input(fname)
 
     pairs = input.split('\n')
-    if part == 1:
-        count = 0
-        for pair in pairs:
-            elf1 = pair.split(',')[0]
-            elf1min = int(elf1.split('-')[0])
-            elf1max = int(elf1.split('-')[1])
-            elf2 = pair.split(',')[1]
-            elf2min = int(elf2.split('-')[0])
-            elf2max = int(elf2.split('-')[1])
+    count = 0
+    for pair in pairs:
+        elf1 = pair.split(',')[0]
+        elf1min = int(elf1.split('-')[0])
+        elf1max = int(elf1.split('-')[1])
+        elf2 = pair.split(',')[1]
+        elf2min = int(elf2.split('-')[0])
+        elf2max = int(elf2.split('-')[1])
+        if part == 1:
+            # fully contains if one elf simultaneously has the smallest min and largest max of the pair
             count += 1 if (elf1min <= elf2min and elf1max >= elf2max) or (elf2min <= elf1min and elf2max >= elf1max) else 0
-        print(count)
-    if part == 2:
-        print("nyi")
-
+        if part == 2:
+            # inverted if statement: there cannot exist any overlap if max of one is smaller than the min of the other
+            count += 0 if (elf1max < elf2min) or (elf2max < elf1min) else 1
+    print(count)
 
 if __name__ == "__main__":
     args = sys.argv[1:]
