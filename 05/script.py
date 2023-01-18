@@ -46,12 +46,13 @@ def parse_crates(crates):
     
     return stacks
 
-def move_crates(stacks, procedures):
+def move_crates(stacks, procedures, part):
     for procedure in procedures:
         # parse procedure
         numbers = [int(i) for i in procedure.split() if i.isdigit()]
         if len(numbers) != 3:
             print(f"ERROR: invalid procedure '{procedure}'")
+            return
         
         # explicitly written out to separate variables for readability
         count = numbers[0]
@@ -59,8 +60,15 @@ def move_crates(stacks, procedures):
         dest = str(numbers[2])
         
         # pop from src list and push onto the dest list, 'count' times
-        for i in range(count):
-            stacks[dest].append(stacks[src].pop())
+        if part == 1:
+            for i in range(count):
+                stacks[dest].append(stacks[src].pop())
+        elif part == 2:
+            stacks[dest].extend(stacks[src][-count:])
+            del stacks[src][-count:]
+        else:
+            print(f"ERROR: invalid part number '{part}'")
+            return
 
     return stacks
 
@@ -78,7 +86,7 @@ def main(fname, part=1):
     procedures = tokens[1].split('\n')
 
     stacks = parse_crates(tokens[0])
-    stacks = move_crates(stacks, procedures)
+    stacks = move_crates(stacks, procedures, part)
     output = get_top_layers(stacks)
     print(output)
 
